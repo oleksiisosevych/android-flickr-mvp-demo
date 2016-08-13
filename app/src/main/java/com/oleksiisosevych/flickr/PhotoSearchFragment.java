@@ -16,6 +16,7 @@ import com.oleksiisosevych.flickr.data.api.FlickrService;
 import com.oleksiisosevych.flickr.data.model.Photo;
 import com.oleksiisosevych.flickr.data.model.PhotosSearchResponse;
 import com.oleksiisosevych.flickr.di.FlickrApp;
+import com.oleksiisosevych.flickr.view.common.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,9 @@ public class PhotoSearchFragment extends Fragment {
     private List<Photo> photoList = new ArrayList<>();
     private PhotoSearchAdapter adapter;
     private String currentStatusMsg;
+    private Call<PhotosSearchResponse> searchPhotoRequest;
+    private String currentSearchString;
+    private int totalPhotosForCurrentSearchText;
 
     public PhotoSearchFragment() {
         // Required empty public constructor
@@ -68,22 +72,42 @@ public class PhotoSearchFragment extends Fragment {
         ButterKnife.bind(this, view);
         FlickrApp.get(getActivity()).getAppComponent().inject(this);
         int columnsNumber = getResources().getInteger(R.integer.columns_number);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnsNumber));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columnsNumber);
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (totalItemsCount < totalPhotosForCurrentSearchText) {
+                    loadMorePictures(page);
+                }
+            }
+        });
         updateCurrentStatusMsg();
         return view;
     }
+
+    private void loadMorePictures(int page) {
+        searchPictures(currentSearchString, page);
+    }
+
 
     private void updateCurrentStatusMsg() {
         statusMsg.setText(currentStatusMsg);
     }
 
-    private void searchPictures(String searchText) {
+    private void searchPictures(String searchText, int page) {
+        currentSearchString = searchText;
         currentStatusMsg = getString(R.string.status_loading);
         updateCurrentStatusMsg();
-        photoList.clear();
-        adapter.notifyDataSetChanged();
-        Call<PhotosSearchResponse> searchPhotoRequest = flickrService.searchPictures(searchText);
+        if (page == 0) {
+            photoList.clear();
+            adapter.notifyDataSetChanged();
+        }
+        if (searchPhotoRequest != null) {
+            searchPhotoRequest.cancel();
+        }
+        searchPhotoRequest = flickrService.searchPictures(searchText, page + 1);
         searchPhotoRequest.enqueue(new Callback<PhotosSearchResponse>() {
             @Override
             public void onResponse(Call<PhotosSearchResponse> call,
@@ -93,8 +117,9 @@ public class PhotoSearchFragment extends Fragment {
                     if (photoSearchResponse.getStat().toLowerCase().equals("ok")) {
                         photoList.addAll(photoSearchResponse.getPhotos().getPhoto());
                         adapter.notifyDataSetChanged();
+                        totalPhotosForCurrentSearchText = Integer.parseInt(photoSearchResponse.getPhotos().getTotal());
                         currentStatusMsg = getString(R.string.status_showing_pictures_format,
-                                photoList.size(), photoSearchResponse.getPhotos().getTotal());
+                                photoList.size(), totalPhotosForCurrentSearchText);
                         updateCurrentStatusMsg();
                     }
                 }
@@ -108,7 +133,8 @@ public class PhotoSearchFragment extends Fragment {
         });
     }
 
+
     public void requestSearch(String query) {
-        searchPictures(query);
+        searchPictures(query, 0);
     }
 }
