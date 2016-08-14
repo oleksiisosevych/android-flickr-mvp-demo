@@ -1,4 +1,4 @@
-package com.oleksiisosevych.flickr;
+package com.oleksiisosevych.flickr.view.search;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oleksiisosevych.flickr.R;
 import com.oleksiisosevych.flickr.data.model.Photo;
 import com.squareup.picasso.Picasso;
 
@@ -16,11 +17,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PhotoSearchAdapter extends RecyclerView.Adapter<PhotoSearchAdapter.ViewHolder> {
+public class FlickrImagesAdapter extends RecyclerView.Adapter<FlickrImagesAdapter.ViewHolder> {
     private Context context;
     private List<Photo> photos;
 
-    public PhotoSearchAdapter(Context context, List<Photo> photos) {
+    public FlickrImagesAdapter(Context context, List<Photo> photos) {
         this.context = context;
         this.photos = photos;
     }

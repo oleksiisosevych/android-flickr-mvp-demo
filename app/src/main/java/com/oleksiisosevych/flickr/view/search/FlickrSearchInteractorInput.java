@@ -1,4 +1,4 @@
-package com.oleksiisosevych.flickr;
+package com.oleksiisosevych.flickr.view.search;
 
 public interface FlickrSearchInteractorInput {
     void setInteractorOutput(FlickrSearchInteractorOutput presenter);

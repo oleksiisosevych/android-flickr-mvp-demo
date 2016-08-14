@@ -1,4 +1,4 @@
-package com.oleksiisosevych.flickr;
+package com.oleksiisosevych.flickr.view.search;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.oleksiisosevych.flickr.R;
 import com.oleksiisosevych.flickr.data.api.FlickrService;
 import com.oleksiisosevych.flickr.data.model.Photo;
 import com.oleksiisosevych.flickr.di.FlickrApp;
@@ -25,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PhotoSearchFragment extends Fragment implements FlickrSearchPresenterOutput {
+public class FlickrSearchFragment extends Fragment implements FlickrSearchPresenterOutput {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.status_msg) TextView statusMsg;
 
@@ -34,21 +35,21 @@ public class PhotoSearchFragment extends Fragment implements FlickrSearchPresent
     @Inject FlickrService flickrService;
 
     private List<Photo> photoList = new ArrayList<>();
-    private PhotoSearchAdapter adapter;
+    private FlickrImagesAdapter adapter;
 
-    public PhotoSearchFragment() {
+    public FlickrSearchFragment() {
         // Required empty public constructor
     }
 
-    public static PhotoSearchFragment newInstance() {
-        return new PhotoSearchFragment();
+    public static FlickrSearchFragment newInstance() {
+        return new FlickrSearchFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        adapter = new PhotoSearchAdapter(getActivity(), photoList);
+        adapter = new FlickrImagesAdapter(getActivity(), photoList);
     }
 
     @Override

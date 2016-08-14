@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".PhotoSearchActivity"
+            android:name=".view.search.FlickrSearchActivity"
             android:launchMode="singleTop">>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -29,7 +29,7 @@
 
         <!-- Content provider for search suggestions -->
         <provider
-            android:name=".FlickrSearchRecentSuggestionsProvider"
+            android:name=".view.search.FlickrSearchRecentSuggestionsProvider"
             android:authorities="flickr.suggestion.authority"/>
     </application>
 

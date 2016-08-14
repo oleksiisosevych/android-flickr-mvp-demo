@@ -1,4 +1,4 @@
-package com.oleksiisosevych.flickr;
+package com.oleksiisosevych.flickr.view.search;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -12,9 +12,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class PhotoSearchActivity extends AppCompatActivity {
+import com.oleksiisosevych.flickr.R;
 
-    private PhotoSearchFragment picturesFragment;
+public class FlickrSearchActivity extends AppCompatActivity {
+
+    private FlickrSearchFragment picturesFragment;
     private SearchRecentSuggestions suggestions =
             new SearchRecentSuggestions(this,
                     FlickrSearchRecentSuggestionsProvider.AUTHORITY,
@@ -26,13 +28,13 @@ public class PhotoSearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // find the retained fragment on activity restarts
-        String tag = PhotoSearchFragment.class.getSimpleName();
+        String tag = FlickrSearchFragment.class.getSimpleName();
         FragmentManager fm = getSupportFragmentManager();
-        picturesFragment = (PhotoSearchFragment) fm.findFragmentByTag(tag);
+        picturesFragment = (FlickrSearchFragment) fm.findFragmentByTag(tag);
 
         // create the fragment for the first time
         if (picturesFragment == null) {
-            picturesFragment = PhotoSearchFragment.newInstance();
+            picturesFragment = FlickrSearchFragment.newInstance();
             fm.beginTransaction()
                     .add(R.id.content, picturesFragment, tag)
                     .commit();

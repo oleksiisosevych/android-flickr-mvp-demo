@@ -1,4 +1,4 @@
-package com.oleksiisosevych.flickr;
+package com.oleksiisosevych.flickr.view.search;
 
 import com.oleksiisosevych.flickr.data.api.FlickrService;
 
