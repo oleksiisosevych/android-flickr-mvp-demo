@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 public class FlickrSearchPresenter implements FlickrSearchPresenterInput, FlickrSearchInteractorOutput {
     private FlickrSearchPresenterOutput mView;
-    private List<Photo> mLoadedData;
+    private List<Photo> mLoadedData = new ArrayList<>();
     private FlickrSearchInteractorInput mInteractor;
     private String mSearchQuery;
     private int mCurrentPage = 1;
@@ -53,11 +53,7 @@ public class FlickrSearchPresenter implements FlickrSearchPresenterInput, Flickr
 
     private void reload() {
         mView.showProgress();
-        if (mLoadedData == null) {
-            mLoadedData = new ArrayList<>();
-        } else {
-            mLoadedData.clear();
-        }
+        mLoadedData.clear();
         mLoading = true;
         mInteractor.loadFlickrImages(mSearchQuery, 1);
     }

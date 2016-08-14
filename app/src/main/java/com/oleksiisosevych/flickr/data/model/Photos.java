@@ -18,6 +18,14 @@ public class Photos {
     @SerializedName("total") @Expose private String total;
     @SerializedName("photo") @Expose private List<Photo> photo = new ArrayList<Photo>();
 
+    private Photos(Builder builder) {
+        setPage(builder.page);
+        setPages(builder.pages);
+        setPerpage(builder.perpage);
+        setTotal(builder.total);
+        setPhoto(builder.photo);
+    }
+
     /**
      * @return The page
      */
@@ -88,4 +96,44 @@ public class Photos {
         this.photo = photo;
     }
 
+
+    public static final class Builder {
+        private Integer page;
+        private Integer pages;
+        private Integer perpage;
+        private String total;
+        private List<Photo> photo;
+
+        public Builder() {
+        }
+
+        public Builder page(Integer val) {
+            page = val;
+            return this;
+        }
+
+        public Builder pages(Integer val) {
+            pages = val;
+            return this;
+        }
+
+        public Builder perpage(Integer val) {
+            perpage = val;
+            return this;
+        }
+
+        public Builder total(String val) {
+            total = val;
+            return this;
+        }
+
+        public Builder photo(List<Photo> val) {
+            photo = val;
+            return this;
+        }
+
+        public Photos build() {
+            return new Photos(this);
+        }
+    }
 }

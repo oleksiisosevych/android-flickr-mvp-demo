@@ -12,6 +12,11 @@ public class PhotoSearchResult {
     @SerializedName("photos") @Expose private Photos photos;
     @SerializedName("stat") @Expose private String stat;
 
+    private PhotoSearchResult(Builder builder) {
+        setPhotos(builder.photos);
+        setStat(builder.stat);
+    }
+
     /**
      * @return The photos
      */
@@ -40,4 +45,26 @@ public class PhotoSearchResult {
         this.stat = stat;
     }
 
+
+    public static final class Builder {
+        private Photos photos;
+        private String stat;
+
+        public Builder() {
+        }
+
+        public Builder photos(Photos val) {
+            photos = val;
+            return this;
+        }
+
+        public Builder stat(String val) {
+            stat = val;
+            return this;
+        }
+
+        public PhotoSearchResult build() {
+            return new PhotoSearchResult(this);
+        }
+    }
 }
