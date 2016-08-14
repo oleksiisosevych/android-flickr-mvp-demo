@@ -29,6 +29,8 @@ import butterknife.ButterKnife;
 public class FlickrSearchFragment extends Fragment implements FlickrSearchPresenterOutput {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.status_msg) TextView statusMsg;
+    @BindView(R.id.logo) View logo;
+
 
     @Inject FlickrSearchPresenterInput mPresenter;
 
@@ -113,6 +115,18 @@ public class FlickrSearchFragment extends Fragment implements FlickrSearchPresen
     @Override
     public void showWelcomeStatus() {
         statusMsg.setText(getString(R.string.welcome_msg));
+    }
+
+    @Override
+    public void showLogo() {
+        logo.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideLogo() {
+        logo.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override

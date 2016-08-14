@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 public class FlickrSearchPresenter implements FlickrSearchPresenterInput, FlickrSearchInteractorOutput {
     private FlickrSearchPresenterOutput mView;
-    private List<Photo> mLoadedData = new ArrayList<>();
+    private List<Photo> mLoadedData;
     private FlickrSearchInteractorInput mInteractor;
     private String mSearchQuery;
     private int mCurrentPage = 1;
@@ -40,6 +40,7 @@ public class FlickrSearchPresenter implements FlickrSearchPresenterInput, Flickr
             } else {
                 mView.showCurrentProgress(mLoadedData.size(), mTotalImagesForCurrentQuery);
             }
+            mView.hideLogo();
             return;
         }
 
@@ -47,13 +48,14 @@ public class FlickrSearchPresenter implements FlickrSearchPresenterInput, Flickr
             reload();
         } else {
             mView.showWelcomeStatus();
+            mView.showLogo();
         }
 
     }
 
     private void reload() {
         mView.showProgress();
-        mLoadedData.clear();
+        mLoadedData = new ArrayList<>();
         mLoading = true;
         mInteractor.loadFlickrImages(mSearchQuery, 1);
     }
@@ -81,6 +83,7 @@ public class FlickrSearchPresenter implements FlickrSearchPresenterInput, Flickr
     @Override
     public void onFlickrImagesLoaded(PhotoSearchResult result) {
         mLoading = false;
+        mView.hideLogo();
         updateSearchResultInfo(result);
         mLoadedData.addAll(result.getPhotos().getPhoto());
         mView.showCurrentProgress(mLoadedData.size(), mTotalImagesForCurrentQuery);

@@ -16,5 +16,9 @@ public interface FlickrSearchPresenterOutput {
 
     void showWelcomeStatus();
 
+    void showLogo();
+
+    void hideLogo();
+
     void showGeneralErrorMsg();
 }
