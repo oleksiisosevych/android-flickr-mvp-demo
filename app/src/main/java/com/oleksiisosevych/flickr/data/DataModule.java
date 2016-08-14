@@ -41,7 +41,6 @@ public class DataModule {
         return HttpUrl.parse("https://api.flickr.com/");
     }
 
-
     @Provides
     @Singleton
     public HttpLoggingInterceptor provideLogginInterceptor() {
@@ -59,7 +58,6 @@ public class DataModule {
                 .addInterceptor(loggingInterceptor)
                 .build();
     }
-
 
     @Provides
     @Singleton

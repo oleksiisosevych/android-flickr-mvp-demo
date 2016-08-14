@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * The core component for Ayuda applications
+ * The core component for Flick application
  */
 @Singleton
 @Component(modules = {FlickrAppModule.class, DataModule.class, FlickrSearchResultModule.class})

@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.oleksiisosevych.flickr.data.DataModule;
 import com.oleksiisosevych.flickr.view.search.FlickrSearchResultModule;
-//import android.support.multidex.MultiDex;
-
 
 public class FlickrApp extends Application {
 
