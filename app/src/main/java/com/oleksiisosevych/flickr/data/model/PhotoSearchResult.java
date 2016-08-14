@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class PhotosSearchResponse {
+public class PhotoSearchResult {
 
     @SerializedName("photos") @Expose private Photos photos;
     @SerializedName("stat") @Expose private String stat;

@@ -5,7 +5,8 @@
     <string name="api_problems">Api Error</string>
     <string name="status_loading">Loading pictures&#8230;</string>
     <string name="status_showing_pictures_format" formatted="false">Showing %s / %s pictures</string>
+    <string name="welcome_msg">Please, enter keywords in search field</string>
+    <string name="general_error_msg">Something went wrong, try again later</string>
     <string name="search_hint">Search photos</string>
-
 
 </resources>

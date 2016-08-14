@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -14,6 +15,10 @@ import android.view.MenuItem;
 public class PhotoSearchActivity extends AppCompatActivity {
 
     private PhotoSearchFragment picturesFragment;
+    private SearchRecentSuggestions suggestions =
+            new SearchRecentSuggestions(this,
+                    FlickrSearchRecentSuggestionsProvider.AUTHORITY,
+                    FlickrSearchRecentSuggestionsProvider.MODE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class PhotoSearchActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            suggestions.saveRecentQuery(query, null);
             picturesFragment.requestSearch(query);
         }
     }

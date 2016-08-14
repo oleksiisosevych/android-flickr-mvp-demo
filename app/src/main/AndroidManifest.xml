@@ -26,6 +26,11 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
+
+        <!-- Content provider for search suggestions -->
+        <provider
+            android:name=".FlickrSearchRecentSuggestionsProvider"
+            android:authorities="flickr.suggestion.authority"/>
     </application>
 
 </manifest>

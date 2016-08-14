@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.oleksiisosevych.flickr.data.api.FlickrService;
 import com.oleksiisosevych.flickr.data.model.Photo;
-import com.oleksiisosevych.flickr.data.model.PhotosSearchResponse;
+import com.oleksiisosevych.flickr.data.model.PhotoSearchResult;
 import com.oleksiisosevych.flickr.di.FlickrApp;
 import com.oleksiisosevych.flickr.view.common.EndlessRecyclerViewScrollListener;
 
@@ -26,20 +26,20 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
-public class PhotoSearchFragment extends Fragment {
+public class PhotoSearchFragment extends Fragment implements FlickrSearchPresenterOutput {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.status_msg) TextView statusMsg;
+
+    @Inject FlickrSearchPresenterInput mPresenter;
 
     @Inject FlickrService flickrService;
 
     private List<Photo> photoList = new ArrayList<>();
     private PhotoSearchAdapter adapter;
     private String currentStatusMsg;
-    private Call<PhotosSearchResponse> searchPhotoRequest;
+    private Call<PhotoSearchResult> searchPhotoRequest;
     private String currentSearchString;
     private int totalPhotosForCurrentSearchText;
 
@@ -71,6 +71,7 @@ public class PhotoSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
         ButterKnife.bind(this, view);
         FlickrApp.get(getActivity()).getAppComponent().inject(this);
+        mPresenter.setView(this);
         int columnsNumber = getResources().getInteger(R.integer.columns_number);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columnsNumber);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -78,63 +79,55 @@ public class PhotoSearchFragment extends Fragment {
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (totalItemsCount < totalPhotosForCurrentSearchText) {
-                    loadMorePictures(page);
-                }
+                mPresenter.onEndOfListReached();
             }
         });
-        updateCurrentStatusMsg();
+
         return view;
     }
 
-    private void loadMorePictures(int page) {
-        searchPictures(currentSearchString, page);
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onViewShow();
     }
-
-
-    private void updateCurrentStatusMsg() {
-        statusMsg.setText(currentStatusMsg);
-    }
-
-    private void searchPictures(String searchText, int page) {
-        currentSearchString = searchText;
-        currentStatusMsg = getString(R.string.status_loading);
-        updateCurrentStatusMsg();
-        if (page == 0) {
-            photoList.clear();
-            adapter.notifyDataSetChanged();
-        }
-        if (searchPhotoRequest != null) {
-            searchPhotoRequest.cancel();
-        }
-        searchPhotoRequest = flickrService.searchPictures(searchText, page + 1);
-        searchPhotoRequest.enqueue(new Callback<PhotosSearchResponse>() {
-            @Override
-            public void onResponse(Call<PhotosSearchResponse> call,
-                                   Response<PhotosSearchResponse> response) {
-                if (response.isSuccess()) {
-                    PhotosSearchResponse photoSearchResponse = response.body();
-                    if (photoSearchResponse.getStat().toLowerCase().equals("ok")) {
-                        photoList.addAll(photoSearchResponse.getPhotos().getPhoto());
-                        adapter.notifyDataSetChanged();
-                        totalPhotosForCurrentSearchText = Integer.parseInt(photoSearchResponse.getPhotos().getTotal());
-                        currentStatusMsg = getString(R.string.status_showing_pictures_format,
-                                photoList.size(), totalPhotosForCurrentSearchText);
-                        updateCurrentStatusMsg();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PhotosSearchResponse> call, Throwable t) {
-                currentStatusMsg = getString(R.string.api_problems);
-                updateCurrentStatusMsg();
-            }
-        });
-    }
-
 
     public void requestSearch(String query) {
-        searchPictures(query, 0);
+        mPresenter.searchQueryChanged(query);
     }
+
+    @Override
+    public void showProgress() {
+        statusMsg.setText(getString(R.string.status_loading));
+    }
+
+    @Override
+    public void showCurrentProgress(int size, int total) {
+        statusMsg.setText(getString(R.string.status_showing_pictures_format, size, total));
+    }
+
+    @Override
+    public void setFlickrImages(List<Photo> images) {
+        photoList.clear();
+        photoList.addAll(images);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void clearImages() {
+
+    }
+
+    @Override
+    public void showWelcomeStatus() {
+        statusMsg.setText(getString(R.string.welcome_msg));
+    }
+
+    @Override
+    public void showGeneralErrorMsg() {
+        statusMsg.setText(getString(R.string.general_error_msg));
+
+    }
+
 }
