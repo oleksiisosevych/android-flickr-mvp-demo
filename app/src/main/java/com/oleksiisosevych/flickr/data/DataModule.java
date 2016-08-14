@@ -1,7 +1,6 @@
 package com.oleksiisosevych.flickr.data;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,10 +20,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.content.Context.MODE_PRIVATE;
-
 @Module
-public final class DataModule {
+public class DataModule {
     static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
     static OkHttpClient.Builder createOkHttpClient(Application app) {
@@ -40,14 +37,14 @@ public final class DataModule {
 
     @Provides
     @Singleton
-    HttpUrl provideHttpUrl() {
+    public HttpUrl provideHttpUrl() {
         return HttpUrl.parse("https://api.flickr.com/");
     }
 
 
     @Provides
     @Singleton
-    HttpLoggingInterceptor provideLogginInterceptor() {
+    public HttpLoggingInterceptor provideLogginInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         return logging;
@@ -55,7 +52,7 @@ public final class DataModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideApiClient(Application app, HttpLoggingInterceptor loggingInterceptor) {
+    public OkHttpClient provideApiClient(Application app, HttpLoggingInterceptor loggingInterceptor) {
         return createOkHttpClient(app)
                 .build()
                 .newBuilder()
@@ -66,20 +63,20 @@ public final class DataModule {
 
     @Provides
     @Singleton
-    GsonBuilder provideGsonBuilder() {
+    public GsonBuilder provideGsonBuilder() {
         return new GsonBuilder();
     }
 
     @Provides
     @Singleton
-    Gson provideGson(GsonBuilder gsonBuilder) {
+    public Gson provideGson(GsonBuilder gsonBuilder) {
         return gsonBuilder.create();
     }
 
 
     @Provides
     @Singleton
-    Retrofit provideRetrofit(HttpUrl baseUrl, OkHttpClient client, Gson gson) {
+    public Retrofit provideRetrofit(HttpUrl baseUrl, OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 .client(client)
                 .baseUrl(baseUrl)
@@ -89,14 +86,8 @@ public final class DataModule {
 
     @Provides
     @Singleton
-    FlickrService provideFlickrApiService(Retrofit retrofit) {
+    public FlickrService provideFlickrApiService(Retrofit retrofit) {
         return retrofit.create(FlickrService.class);
-    }
-
-    @Provides
-    @Singleton
-    SharedPreferences provideSharedPreferences(Application app) {
-        return app.getSharedPreferences("FlickrApp", MODE_PRIVATE);
     }
 
 }

@@ -2,6 +2,9 @@ package com.oleksiisosevych.flickr.di;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.oleksiisosevych.flickr.data.DataModule;
+import com.oleksiisosevych.flickr.view.search.FlickrSearchResultModule;
 //import android.support.multidex.MultiDex;
 
 
@@ -9,30 +12,32 @@ public class FlickrApp extends Application {
 
     private AppComponent component;
 
-    public static FlickrApp get(Context context) {
-        return (FlickrApp) context.getApplicationContext();
+    public static AppComponent getAppComponent(Context context) {
+        FlickrApp app = (FlickrApp) context.getApplicationContext();
+        if (app.component == null) {
+            app.component = DaggerAppComponent.builder()
+                    .flickrAppModule(app.getApplicationModule())
+                    .dataModule(app.getDataModule())
+                    .flickrSearchResultModule(app.getSearchResultModule())
+                    .build();
+        }
+        return app.component;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        buildComponentAndInject();
+    public static void clearAppComponent(Context context) {
+        FlickrApp app = (FlickrApp) context.getApplicationContext();
+        app.component = null;
     }
 
-    public void buildComponentAndInject() {
-        component = DaggerAppComponent.builder()
-                .flickrAppModule(new FlickrAppModule(this))
-                .build();
+    protected FlickrAppModule getApplicationModule() {
+        return new FlickrAppModule(this);
     }
 
-    public AppComponent getAppComponent() {
-        return component;
+    protected DataModule getDataModule() {
+        return new DataModule();
     }
 
-//    @Override
-//    protected void attachBaseContext(Context base) {
-//        super.attachBaseContext(base);
-//        MultiDex.install(this);
-//    }
+    protected FlickrSearchResultModule getSearchResultModule() {
+        return new FlickrSearchResultModule();
+    }
 }

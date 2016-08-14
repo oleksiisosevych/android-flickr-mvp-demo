@@ -62,7 +62,7 @@ public class FlickrSearchFragment extends Fragment implements FlickrSearchPresen
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
 
         ButterKnife.bind(this, view);
-        FlickrApp.get(getActivity()).getAppComponent().inject(this);
+        FlickrApp.getAppComponent(getActivity()).inject(this);
 
         mPresenter.setView(this);
 

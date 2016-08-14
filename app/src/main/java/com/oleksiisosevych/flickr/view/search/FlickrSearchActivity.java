@@ -22,6 +22,10 @@ public class FlickrSearchActivity extends AppCompatActivity {
                     FlickrSearchRecentSuggestionsProvider.AUTHORITY,
                     FlickrSearchRecentSuggestionsProvider.MODE);
 
+    public static Intent getStartIntent(Context context) {
+        return new Intent(context, FlickrSearchActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

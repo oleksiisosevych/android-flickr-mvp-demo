@@ -8,11 +8,11 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public final class FlickrSearchResultModule {
+public class FlickrSearchResultModule {
 
     @Provides
     @Singleton
-    FlickrSearchPresenterInput provideFlickrPresenter(FlickrSearchInteractorInput interactor) {
+    public FlickrSearchPresenterInput provideFlickrPresenter(FlickrSearchInteractorInput interactor) {
         FlickrSearchPresenter presenter = new FlickrSearchPresenter(interactor);
         interactor.setInteractorOutput(presenter);
         return presenter;
@@ -20,7 +20,7 @@ public final class FlickrSearchResultModule {
 
     @Provides
     @Singleton
-    FlickrSearchInteractorInput provideFlickrInteractor(FlickrService service) {
+    public FlickrSearchInteractorInput provideFlickrInteractor(FlickrService service) {
         return new FlickrInteractor(service);
     }
 }

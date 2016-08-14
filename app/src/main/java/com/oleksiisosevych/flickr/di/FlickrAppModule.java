@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public final class FlickrAppModule {
+public class FlickrAppModule {
     private final FlickrApp app;
 
     public FlickrAppModule(FlickrApp app) {
