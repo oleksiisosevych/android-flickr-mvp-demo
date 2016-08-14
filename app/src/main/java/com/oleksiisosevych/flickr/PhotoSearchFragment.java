@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.oleksiisosevych.flickr.data.api.FlickrService;
 import com.oleksiisosevych.flickr.data.model.Photo;
-import com.oleksiisosevych.flickr.data.model.PhotoSearchResult;
 import com.oleksiisosevych.flickr.di.FlickrApp;
 import com.oleksiisosevych.flickr.view.common.EndlessRecyclerViewScrollListener;
 
@@ -25,7 +23,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
 
 
 public class PhotoSearchFragment extends Fragment implements FlickrSearchPresenterOutput {
@@ -38,10 +35,6 @@ public class PhotoSearchFragment extends Fragment implements FlickrSearchPresent
 
     private List<Photo> photoList = new ArrayList<>();
     private PhotoSearchAdapter adapter;
-    private String currentStatusMsg;
-    private Call<PhotoSearchResult> searchPhotoRequest;
-    private String currentSearchString;
-    private int totalPhotosForCurrentSearchText;
 
     public PhotoSearchFragment() {
         // Required empty public constructor
@@ -64,16 +57,17 @@ public class PhotoSearchFragment extends Fragment implements FlickrSearchPresent
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Log.d(PhotoSearchFragment.class.getSimpleName(), "onCreateView");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pictures, container, false);
+
         ButterKnife.bind(this, view);
         FlickrApp.get(getActivity()).getAppComponent().inject(this);
+
         mPresenter.setView(this);
+
         int columnsNumber = getResources().getInteger(R.integer.columns_number);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columnsNumber);
+
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -114,10 +108,6 @@ public class PhotoSearchFragment extends Fragment implements FlickrSearchPresent
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void clearImages() {
-
-    }
 
     @Override
     public void showWelcomeStatus() {

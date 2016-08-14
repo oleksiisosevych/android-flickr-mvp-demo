@@ -53,7 +53,6 @@ public class FlickrSearchPresenter implements FlickrSearchPresenterInput, Flickr
 
     private void reload() {
         mView.showProgress();
-        mView.clearImages();
         if (mLoadedData == null) {
             mLoadedData = new ArrayList<>();
         } else {
@@ -76,7 +75,7 @@ public class FlickrSearchPresenter implements FlickrSearchPresenterInput, Flickr
 
     @Override
     public void onEndOfListReached() {
-        if (mTotalImagesForCurrentQuery > mLoadedData.size()) {
+        if (mPagesTotalForCurrentQuery > mCurrentPage) {
             mLoading = true;
             mInteractor.loadFlickrImages(mSearchQuery, mCurrentPage + 1);
             mView.showProgress();

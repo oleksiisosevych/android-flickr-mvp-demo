@@ -14,8 +14,6 @@ public interface FlickrSearchPresenterOutput {
 
     void setFlickrImages(List<Photo> images);
 
-    void clearImages();
-
     void showWelcomeStatus();
 
     void showGeneralErrorMsg();
