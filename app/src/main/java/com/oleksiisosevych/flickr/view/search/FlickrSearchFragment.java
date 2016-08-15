@@ -27,9 +27,9 @@ import butterknife.ButterKnife;
 
 
 public class FlickrSearchFragment extends Fragment implements FlickrSearchPresenterOutput {
-    @BindView(R.id.recycler_view) RecyclerView recyclerView;
-    @BindView(R.id.status_msg) TextView statusMsg;
-    @BindView(R.id.logo) View logo;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.status_msg) TextView mStatusMsg;
+    @BindView(R.id.logo) View mLogo;
 
 
     @Inject FlickrSearchPresenterInput mPresenter;
@@ -71,9 +71,9 @@ public class FlickrSearchFragment extends Fragment implements FlickrSearchPresen
         int columnsNumber = getResources().getInteger(R.integer.columns_number);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), columnsNumber);
 
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 mPresenter.onEndOfListReached();
@@ -96,12 +96,12 @@ public class FlickrSearchFragment extends Fragment implements FlickrSearchPresen
 
     @Override
     public void showProgress() {
-        statusMsg.setText(getString(R.string.status_loading));
+        mStatusMsg.setText(getString(R.string.status_loading));
     }
 
     @Override
     public void showCurrentProgress(int size, int total) {
-        statusMsg.setText(getString(R.string.status_showing_pictures_format, size, total));
+        mStatusMsg.setText(getString(R.string.status_showing_pictures_format, size, total));
     }
 
     @Override
@@ -114,24 +114,24 @@ public class FlickrSearchFragment extends Fragment implements FlickrSearchPresen
 
     @Override
     public void showWelcomeStatus() {
-        statusMsg.setText(getString(R.string.welcome_msg));
+        mStatusMsg.setText(getString(R.string.welcome_msg));
     }
 
     @Override
     public void showLogo() {
-        logo.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        mLogo.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLogo() {
-        logo.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        mLogo.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showGeneralErrorMsg() {
-        statusMsg.setText(getString(R.string.general_error_msg));
+        mStatusMsg.setText(getString(R.string.general_error_msg));
 
     }
 

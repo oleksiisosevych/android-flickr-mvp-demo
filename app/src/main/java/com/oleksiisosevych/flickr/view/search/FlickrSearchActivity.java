@@ -16,8 +16,8 @@ import com.oleksiisosevych.flickr.R;
 
 public class FlickrSearchActivity extends AppCompatActivity {
 
-    private FlickrSearchFragment picturesFragment;
-    private SearchRecentSuggestions suggestions =
+    private FlickrSearchFragment mPicturesFragment;
+    private SearchRecentSuggestions mSearchResentSuggestions =
             new SearchRecentSuggestions(this,
                     FlickrSearchRecentSuggestionsProvider.AUTHORITY,
                     FlickrSearchRecentSuggestionsProvider.MODE);
@@ -34,13 +34,13 @@ public class FlickrSearchActivity extends AppCompatActivity {
         // find the retained fragment on activity restarts
         String tag = FlickrSearchFragment.class.getSimpleName();
         FragmentManager fm = getSupportFragmentManager();
-        picturesFragment = (FlickrSearchFragment) fm.findFragmentByTag(tag);
+        mPicturesFragment = (FlickrSearchFragment) fm.findFragmentByTag(tag);
 
         // create the fragment for the first time
-        if (picturesFragment == null) {
-            picturesFragment = FlickrSearchFragment.newInstance();
+        if (mPicturesFragment == null) {
+            mPicturesFragment = FlickrSearchFragment.newInstance();
             fm.beginTransaction()
-                    .add(R.id.content, picturesFragment, tag)
+                    .add(R.id.content, mPicturesFragment, tag)
                     .commit();
         }
     }
@@ -72,8 +72,8 @@ public class FlickrSearchActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            suggestions.saveRecentQuery(query, null);
-            picturesFragment.requestSearch(query);
+            mSearchResentSuggestions.saveRecentQuery(query, null);
+            mPicturesFragment.requestSearch(query);
         }
     }
 }
