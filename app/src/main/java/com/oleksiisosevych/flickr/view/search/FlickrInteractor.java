@@ -10,6 +10,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FlickrInteractor implements FlickrSearchInteractorInput {
+    public static final String OK = "ok";
+    public static final String CANCELED = "canceled";
+
     private FlickrSearchInteractorOutput mPresenter;
     private FlickrService mFlickrService;
     private Call<PhotoSearchResult> mCurrentRequest;
@@ -37,7 +40,7 @@ public class FlickrInteractor implements FlickrSearchInteractorInput {
                     return;
                 }
                 PhotoSearchResult photoSearchResponse = response.body();
-                if (!photoSearchResponse.getStat().toLowerCase().equals("ok")) {
+                if (!photoSearchResponse.getStat().toLowerCase().equals(OK)) {
                     mPresenter.onError();
                     return;
                 }
@@ -46,7 +49,7 @@ public class FlickrInteractor implements FlickrSearchInteractorInput {
 
             @Override
             public void onFailure(Call<PhotoSearchResult> call, Throwable t) {
-                if (!t.getMessage().toLowerCase().equals("canceled")) {
+                if (!t.getMessage().toLowerCase().equals(CANCELED)) {
                     mPresenter.onError();
                 }
             }
